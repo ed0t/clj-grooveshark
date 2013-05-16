@@ -5,7 +5,7 @@
 (defn secretKeyInst [key mac]
   (SecretKeySpec. (.getBytes key) (.getAlgorithm mac)))
 
-(defn sign
+(defn create-signature
   "Returns the signature of a string with a given
     key, using a MD5 HMAC."
   [key string]
@@ -32,6 +32,9 @@
   [bytes]
   (apply str (map toString bytes)))
 
-(defn sign-as-string [key string]
-  (toHexString (sign key string))
+
+(defn sign
+  "Sign a given querystring with the given key"
+  [key string]
+  (toHexString (create-signature key string))
   )

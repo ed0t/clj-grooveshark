@@ -1,4 +1,4 @@
-(defproject clj-grooveshark "0.1.0-SNAPSHOT"
+(defproject clj-grooveshark "0.1.1-SNAPSHOT"
   :description "Clojure bindings for Grooveshark API"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"

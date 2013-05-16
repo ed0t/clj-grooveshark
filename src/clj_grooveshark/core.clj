@@ -19,19 +19,37 @@
     )
   )
 
+
 ;TO REFACTOR!
 (defn execute-basic [query]
   (client/get (:url configuration) {:body query} {:as :json})
   )
 
 (defn execute [query]
-  (json/read-str (:body (client/get (str (:url configuration) "?sig=" (toHexString (sign (:secret configuration) query))) {:body query} {:as :json})))
+;  (json/read-str (:body (client/get (str (:url configuration) "?sig=" (toHexString (create-signature (:secret configuration) query))) {:body query} {:as :json})) :key-fn keyword )
+  (json/read-str (:body (client/get (str (:url configuration) "?sig=" (sign (:secret configuration) query)) {:body query} {:as :json})) :key-fn keyword )
   )
 
 (defn execute-secure [query]
-;  (json/read-str (:body (client/get (str (:secure-url configuration) "?sig=" (toHexString (sign (:secret configuration) query))) {:body query} {:as :json})))
-  (json/read-str (:body (client/get (str (:secure-url configuration) "?sig=" (toHexString (sign (:secret configuration) query))) {:body query} {:as :json})))
+;  (json/read-str (:body (client/get (str (:secure-url configuration) "?sig=" (toHexString (create-signature (:secret configuration) query))) {:body query} {:as :json})) :key-fn keyword )
+  (json/read-str (:body (client/get (str (:secure-url configuration) "?sig=" (sign (:secret configuration) query)) {:body query} {:as :json})) :key-fn keyword )
   )
+
+
+(defn exec
+  [url query]
+  (json/read-str (:body (client/get (str url "?sig=" (sign (:secret configuration) query)) {:body query} {:as :json})) :key-fn keyword )
+  )
+
+(def secure
+  (:secure-url configuration)
+  )
+
+(def plain
+  (:url configuration)
+  )
+
+
 
 
 

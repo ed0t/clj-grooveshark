@@ -7,7 +7,7 @@
   "Checks if a given song id exists"
   [song-id]
   (let [response (execute (a-query "getDoesSongExist", {:songID song-id}))]
-    (get response "result")
+    (:result response)
     )
   )
 

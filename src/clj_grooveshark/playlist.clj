@@ -25,8 +25,10 @@
 
 (defn create-playlist
   "Create a new playlist, optionally adding songs to it"
-  [playlist-name session-id song-id & more]
-  (execute-secure (a-query2 "createPlaylist" {:name playlist-name :songIDs (concat (list song-id) more)} {:sessionID session-id}))
+  ([playlist-name session-id song-id & more]
+  (execute-secure (a-query2 "createPlaylist" {:name playlist-name :songIDs (concat (list song-id) more)} {:sessionID session-id})))
+  ([playlist-name session-id song-ids]
+  (execute-secure (a-query2 "createPlaylist" {:name playlist-name :songIDs song-ids} {:sessionID session-id})))
   )
 
 (defn set-playlist-songs

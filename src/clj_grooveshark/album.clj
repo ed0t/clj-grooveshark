@@ -23,6 +23,6 @@
 (defn get-does-album-exists? [album-id]
   "Checks if a given album id exists"
   (let [response (execute (a-query "getDoesAlbumExist", {:albumID album-id}))]
-    (get response "result")
+    (:result response)
     )
   )

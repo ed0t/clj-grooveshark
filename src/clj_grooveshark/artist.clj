@@ -14,9 +14,9 @@
   "Retrieve albums of an artist, given an artist id"
   [artist-id]
   (let [response (execute (a-query "getArtistAlbums" {:artistID artist-id}))]
-    (if (contains? response "errors")
-      (get response "errors")
-      (get (get response "result") "albums")
+    (if (contains? response :errors)
+      (:errors response)
+      (:albums (:result response))
       )
     )
   )
@@ -37,7 +37,7 @@
   "Checks if a given artist id exists"
   [artist-id]
   (let [response (execute (a-query "getDoesArtistExist", {:artistID artist-id}))]
-    (get response "result")
+    (:result response)
     )
   )
 
@@ -46,5 +46,14 @@
   [artist-id & more]
   (execute (a-query "getArtistsInfo" {:artistIDs  (concat (list artist-id) more)}))
   )
+
+(defn get-artists-info2
+  "Returns information for the given list of artist ids."
+  [artist-id & more]
+  (exec plain (a-query2 "getArtistsInfo" {:artistIDs  (concat (list artist-id) more)}))
+  )
+
+
+
 
 
