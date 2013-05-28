@@ -3,9 +3,10 @@
   (:require [clojure.data.json :as json])
   (:use clj-grooveshark.crypto)
   (:use clj-grooveshark.configuration)
+  (:use [clojure.tools.logging :only (error debug)])
   )
 
-;(org.apache.log4j.BasicConfigurator/configure)
+(org.apache.log4j.BasicConfigurator/configure)
 
 (defn a-query
   ([method] (json/write-str {:method method :header {:wsKey (:key configuration)}}))
@@ -22,21 +23,26 @@
   )
 
 
+(defn handle
+  [response callback]
+  (if (contains? response :errors )
+    (:errors response)
+    (do
+      (debug response)
+      (callback response)
+      )
+    )
+  )
+
+
 ;TO REFACTOR!
 (defn execute-basic [query]
   (client/get (:url configuration) {:body query} {:as :json})
   )
 
-;(defn execute [query]
-;  ;  (json/read-str (:body (client/get (str (:url configuration) "?sig=" (toHexString (create-signature (:secret configuration) query))) {:body query} {:as :json})) :key-fn keyword )
-;  (json/read-str (:body (client/get (str (:url configuration) "?sig=" (sign (:secret configuration) query)) {:body query} {:as :json})) :key-fn keyword)
-;  )
-
 (defn execute-secure [query]
-  ;  (json/read-str (:body (client/get (str (:secure-url configuration) "?sig=" (toHexString (create-signature (:secret configuration) query))) {:body query} {:as :json})) :key-fn keyword )
   (json/read-str (:body (client/get (str (:secure-url configuration) "?sig=" (sign (:secret configuration) query)) {:body query} {:as :json})) :key-fn keyword)
   )
-
 
 (def secure
   (:secure-url configuration)
@@ -55,7 +61,6 @@
 (defn execute
   ([query] (do-execute plain query))
   ([url query] (do-execute url query))
-  ;  (json/read-str (:body (client/get (str url "?sig=" (sign (:secret configuration) query)) {:body query} {:as :json})) :key-fn keyword )
   )
 
 
