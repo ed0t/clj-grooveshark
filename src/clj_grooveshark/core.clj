@@ -8,22 +8,18 @@
 
 (org.apache.log4j.BasicConfigurator/configure)
 
-(defn a-query
-  ([method] (json/write-str {:method method :header {:wsKey (:key configuration)}}))
-  ([method parameters] (json/write-str {:method method :parameters parameters :header {:wsKey (:key configuration)}}))
-  ([method session-id parameters] (json/write-str {:method method :parameters parameters :header {:wsKey (:key configuration) :sessionID session-id}}))
-  )
 
-(defn a-query2
+(defn a-query
   "Creates a query with a given method name. Optionally can receive a map of body parameters and a map of header parameters."
-  [method & [parameters header]]
+  [api-key method & [parameters header]]
   (let [query-params (into {} (filter second {:parameters parameters :header header}))]
-    (json/write-str (assoc query-params :method method :header (assoc (get query-params :header ) :wsKey (:key configuration))))
+    (json/write-str (assoc query-params :method method :header (assoc (get query-params :header ) :wsKey api-key)))
     )
   )
 
 
 (defn handle
+  "Handles the respose and applies a callback function in case no errors are returned."
   [response callback]
   (if (contains? response :errors )
     (:errors response)
@@ -40,10 +36,6 @@
   (client/get (:url configuration) {:body query} {:as :json})
   )
 
-(defn execute-secure [query]
-  (json/read-str (:body (client/get (str (:secure-url configuration) "?sig=" (sign (:secret configuration) query)) {:body query} {:as :json})) :key-fn keyword)
-  )
-
 (def secure
   (:secure-url configuration)
   )
@@ -54,13 +46,14 @@
 
 
 (defn- do-execute
-  [url query]
-  (json/read-str (:body (client/get (str url "?sig=" (sign (:secret configuration) query)) {:body query} {:as :json})) :key-fn keyword)
+  [url query secret-key]
+  (json/read-str (:body (client/get (str url "?sig=" (sign secret-key query)) {:body query} {:as :json})) :key-fn keyword)
   )
 
 (defn execute
-  ([query] (do-execute plain query))
-  ([url query] (do-execute url query))
+  "executes a query. It can be a standard query or a secure query (HTTPS). For the latter pass secure as first parameter."
+  ([query secret-key] (do-execute plain query secret-key))
+  ([url query secret-key] (do-execute url query secret-key))
   )
 
 

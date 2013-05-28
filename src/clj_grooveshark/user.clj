@@ -4,26 +4,26 @@
 
 (defn get-user-id-from-username
   "Returns the userId given a valid username. If the username does not exits returns UserID=0"
-  [username]
-  (execute (a-query2 "getUserIDFromUsername" {:username username} nil))
+  [api-key secret-key username]
+  (execute (a-query api-key "getUserIDFromUsername" {:username username} nil) secret-key)
   )
 
 (defn start-session
   "Start a new session"
-  []
-  (execute-secure (a-query "startSession"))
+  [api-key secret-key]
+  (execute secure (a-query api-key "startSession") secret-key)
   )
 
 (defn logout
   "Logout a user from a session"
-  [session-id]
-  (execute-secure (a-query2 "logout" nil {:sessionID session-id}))
+  [api-key secret-key session-id]
+  (execute secure (a-query api-key "logout" nil {:sessionID session-id}) secret-key)
   )
 
 (defn authenticate
   "Authenticate a user given a username, a password and a previously created sessionId"
-  [username password session-id]
-  (execute-secure (a-query2 "authenticate" {:login (.toLowerCase username) :password (digest/md5 password)} {:sessionID session-id}))
+  [api-key secret-key username password session-id]
+  (execute secure (a-query api-key "authenticate" {:login (.toLowerCase username) :password (digest/md5 password)} {:sessionID session-id}) secret-key)
   )
 
 ;(defn addUserLibrarySongs [song-ids album-ids artist-ids session-id]
@@ -32,14 +32,14 @@
 
 (defn get-user-info
   "Returns user information for a given the sessionId. Requires an authenticated session"
-  [session-id]
-  (execute-secure (a-query2 "getUserInfo" nil {:sessionID session-id}))
+  [api-key secret-key session-id]
+  (execute secure (a-query api-key "getUserInfo" nil {:sessionID session-id}) secret-key)
   )
 
 (defn get-user-subscription-details
   "Get logged-in user subscription info. Returns type of subscription and either dateEnd or recurring."
-  [session-id]
-  (execute-secure (a-query2 "getUserSubscriptionDetails" nil {:sessionID session-id}))
+  [api-key secret-key session-id]
+  (execute secure (a-query api-key "getUserSubscriptionDetails" nil {:sessionID session-id}) secret-key)
   )
 
 ;(defn get-user-favourite-songs [session-id & [limit]]

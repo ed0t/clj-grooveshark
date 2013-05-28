@@ -5,21 +5,21 @@
 
 (defn get-does-song-exists?
   "Checks if a given song id exists"
-  [song-id]
-  (let [response (execute (a-query "getDoesSongExist", {:songID song-id}))]
+  [api-key secret-key song-id]
+  (let [response (execute (a-query api-key "getDoesSongExist", {:songID song-id}) secret-key)]
     (:result response)
     )
   )
 
 (defn get-songs-info
   "Returns information for the given list of song ids."
-  [song-id & more]
-  (execute (a-query "getSongsInfo" {:artistIDs  (concat (list song-id) more)}))
+  [api-key secret-key song-id & more]
+  (execute (a-query api-key "getSongsInfo" {:artistIDs (concat (list song-id) more)}) secret-key)
   )
 
 (defn get-popular-songs-today
   "Get a subset of today's popular songs, from the Grooveshark popular billboard."
-  ([] (execute (a-query2 "getPopularSongsToday" nil nil)))
-  ([limit] (execute (a-query2 "getPopularSongsToday" {:limit  limit} nil)))
+  ([api-key secret-key] (execute (a-query api-key "getPopularSongsToday" nil nil)) secret-key)
+  ([api-key secret-key limit] (execute (a-query api-key "getPopularSongsToday" {:limit limit} nil) secret-key))
 
   )
