@@ -10,7 +10,7 @@
   {:body (json/write-str query)}
   )
 
-;
+
 
 (deftest should-check-if-an-album-exists
   (let [response (stringify {:header {:hostname "RHL073"}, :result true})]
