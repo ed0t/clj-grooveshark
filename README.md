@@ -7,15 +7,14 @@ Currently the binding is incomplete.
 
 ## Usage
 
-::
-
+```
   (ns hello-world
     (:use clj-grooveshark.artist))
 
   (defn search-artist [name]
     (get-artist-search-results "grooveshark-api-key" "grooveshark-secret-key" name))
 
-
+```
 
 
 ## Installation
