@@ -19,12 +19,15 @@ Currently the binding is incomplete.
 
 ## Installation
 
-`clj-grooveshark` is available as a Maven artifact from [Clojars](http://clojars.org/clj-grooveshark):
+
+
+`clj-grooveshark` is not yet available as a Maven artifact from [Clojars](http://clojars.org/clj-grooveshark), but it will soon:
 
     :dependencies
       [["clj-grooveshark" "0.1.1-SNAPSHOT"]
        ...]
 
+in the meantime just clone the code and build it locally.
 
 ## Development
 
