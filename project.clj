@@ -11,4 +11,7 @@
                  [log4j/log4j "1.2.16" :exclusions [javax.mail/mail
                                                     javax.jms/jms
                                                     com.sun.jdmk/jmxtools
-                                                    com.sun.jmx/jmxri]]])
+                                                    com.sun.jmx/jmxri]]]
+  :plugins [[codox "0.7.3"]]
+  :codox {:src-dir-uri "https://bitbucket.org/ed0t/clj-grooveshark/blob/master/"}
+  )
